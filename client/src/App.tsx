@@ -42,16 +42,21 @@ const App = observer(() => {
           <IconPlus size={14} />
         </button>
       </div>
-
-      {itemStore.items.map((item) => (
-        <ItemCard
-          key={item.id}
-          {...item}
-          onReplace={handleReplace}
-          onDelete={handleDelete}
-        />
-      ))}
-
+      {itemStore.items.length === 0 ? (
+        <p className="text-sm text-gray-500 text-center py-8">
+          Add your first routine
+        </p>
+      ) : (
+        itemStore.items.map((item) => (
+          <ItemCard
+            key={item.id}
+            {...item}
+            onReplace={handleReplace}
+            onDelete={handleDelete}
+            // onEdit={handleEditClick}
+          />
+        ))
+      )}
       {isModalOpen && <AddItemModal onClose={() => setIsModalOpen(false)} />}
     </div>
   );
