@@ -13,7 +13,7 @@ export const typeDefs = `#graphql
 
   type Mutation {
     addItem(name: String!, cycleDays: Int!, lastReplacedAt: String!): Item
-    updateItem(id: ID!, name: String, cycleDays: Int, lastReplacedAt: String): Item
-    deleteItem(id: ID!): Item
+    updateItem(id: String!, name: String, cycleDays: Int, lastReplacedAt: String): Item
+    deleteItem(id: String!): Item
   }
 `;

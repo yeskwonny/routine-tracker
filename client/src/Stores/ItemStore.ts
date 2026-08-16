@@ -44,6 +44,8 @@ export const ItemStore = types
         mutation: UPDATE_ITEM,
         variables: input,
       });
+      console.log("input", input);
+      console.log("data", data);
       const index = self.items.findIndex((item) => item.id === input.id);
       if (index !== -1) {
         self.items[index] = data.updateItem;
