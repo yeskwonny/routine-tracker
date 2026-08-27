@@ -14,6 +14,7 @@ interface ItemCardProps {
   cycleDays: number;
   lastReplacedAt: string;
   onReplace: (id: string) => void;
+  onEdit: (id: string) => void;
   onDelete: (id: string) => void;
 }
 
@@ -30,6 +31,7 @@ export const ItemCard = observer(
     cycleDays,
     lastReplacedAt,
     onReplace,
+    onEdit,
     onDelete,
   }: ItemCardProps) => {
     const daysRemaining = getDaysRemaining(cycleDays, lastReplacedAt);
@@ -44,9 +46,9 @@ export const ItemCard = observer(
           : `${daysRemaining} days left`;
 
     return (
-      <div className="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-3">
+      <div className="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-3 mb-1">
         <div
-          className={`w-10 h-10 rounded-lg ${bg} flex items-center justify-center shrink-0`}
+          className={`w-10 h-10 rounded-lg ${bg} flex items-center justify-center shrink-0 gap-2`}
         >
           <Icon size={18} className={color} />
         </div>
@@ -66,7 +68,7 @@ export const ItemCard = observer(
         </button>
         {/* !todo modify modal to accept if it is edit mode or add mode */}
         <button
-          onClick={() => {}}
+          onClick={() => onEdit(id)}
           aria-label="Edit item"
           className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 shrink-0"
         >

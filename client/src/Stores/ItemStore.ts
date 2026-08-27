@@ -1,8 +1,8 @@
-import { types, flow } from "mobx-state-tree";
+import { types, flow, type Instance } from "mobx-state-tree";
 import { client } from "../../apolloClient";
 import { ADD_ITEM, DELETE_ITEM, GET_ITEMS, UPDATE_ITEM } from "../api/Item";
 
-const Item = types.model("Item", {
+export const Item = types.model("Item", {
   id: types.identifier,
   name: types.string,
   cycleDays: types.number,
@@ -61,3 +61,4 @@ export const ItemStore = types
   }));
 
 export const itemStore = ItemStore.create({ items: [], isLoading: false });
+export type ItemType = Instance<typeof Item>;
