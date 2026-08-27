@@ -1,9 +1,9 @@
 import "reflect-metadata";
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
-import { AppDataSource } from "./data-source";
-import { Item } from "./entities/Item";
-import { typeDefs } from "./schemas/typeDefs";
+import { AppDataSource } from "./data-source.js";
+import { Item } from "./entities/Item.js";
+import { typeDefs } from "./schemas/typeDefs.js";
 
 const itemRepository = AppDataSource.getRepository(Item);
 
@@ -45,8 +45,6 @@ const resolvers = {
     },
   },
 };
-
-
 
 AppDataSource.initialize()
   .then(async () => {
