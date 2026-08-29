@@ -62,7 +62,7 @@ AppDataSource.initialize()
       cors({
         origin: [
           "http://localhost:5173",
-          "https://routine-tracker-yesol2.vercel.app",
+          "https://routine-tracker-olive-one.vercel.app",
         ],
         credentials: true,
       }),
