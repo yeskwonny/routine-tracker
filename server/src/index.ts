@@ -1,6 +1,8 @@
 import "reflect-metadata";
 import { ApolloServer } from "@apollo/server";
-import { startStandaloneServer } from "@apollo/server/standalone";
+import { expressMiddleware } from "@as-integrations/express5";
+import express from "express";
+import cors from "cors";
 import { AppDataSource } from "./data-source.js";
 import { Item } from "./entities/Item.js";
 import { typeDefs } from "./schemas/typeDefs.js";
@@ -50,12 +52,28 @@ AppDataSource.initialize()
   .then(async () => {
     console.log("✅ Suceesfully connetct to DB");
 
+    const app = express();
     const server = new ApolloServer({ typeDefs, resolvers: resolvers as any });
-    const { url } = await startStandaloneServer(server, {
-      listen: { port: process.env.PORT ? Number(process.env.PORT) : 4000 },
-    });
 
-    console.log(`🚀 Server is running: ${url}`);
+    await server.start();
+
+    app.use(
+      "/",
+      cors({
+        origin: [
+          "http://localhost:5173",
+          "https://routine-tracker-yesol2.vercel.app",
+        ],
+        credentials: true,
+      }),
+      express.json(),
+      expressMiddleware(server),
+    );
+
+    const PORT = process.env.PORT ? Number(process.env.PORT) : 4000;
+    app.listen(PORT, () => {
+      console.log(`🚀 Server is running: http://localhost:${PORT}`);
+    });
   })
   .catch((err) => {
     console.error("❌ Fail to connect to DB ", err);
