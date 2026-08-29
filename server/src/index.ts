@@ -52,7 +52,7 @@ AppDataSource.initialize()
 
     const server = new ApolloServer({ typeDefs, resolvers: resolvers as any });
     const { url } = await startStandaloneServer(server, {
-      listen: { port: 4000 },
+      listen: { port: process.env.PORT ? Number(process.env.PORT) : 4000 },
     });
 
     console.log(`🚀 Server is running: ${url}`);
