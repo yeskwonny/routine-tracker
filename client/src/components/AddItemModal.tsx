@@ -68,7 +68,7 @@ export const AddItemModal = observer(
                 placeholder="Toothbrush head"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm transition-shadow"
               />
             </div>
 
@@ -81,7 +81,7 @@ export const AddItemModal = observer(
                 placeholder="90"
                 value={cycleDays}
                 onChange={(e) => setCycleDays(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm transition-shadow"
               />
             </div>
 
@@ -93,7 +93,7 @@ export const AddItemModal = observer(
                 type="date"
                 value={lastReplacedAt}
                 onChange={(e) => setLastReplacedAt(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm transition-shadow"
               />
             </div>
           </div>

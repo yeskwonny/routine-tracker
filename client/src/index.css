@@ -1,1 +1,24 @@
 @import "tailwindcss";
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 10px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}
+input::placeholder {
+  color: #9ca3af; /* Tailwind gray-400 */
+}
+
+input:focus {
+  outline: none;
+  border-color: #111827; /* gray-900 */
+  box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+}
