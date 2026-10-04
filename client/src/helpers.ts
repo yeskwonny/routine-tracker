@@ -24,6 +24,8 @@ const urlBase64ToUint8Array = (
     throw new Error("VAPID public key is missing");
   }
 
+  console.log("VAPID key exists:", !!import.meta.env.VITE_VAPID_PUBLIC_KEY);
+
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
 
   const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
