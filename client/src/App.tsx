@@ -7,6 +7,7 @@ import { AddItemModal } from "./components/AddItemModal";
 import "./index.css";
 import { Toast } from "./components/Toast";
 import { getDaysRemaining } from "./helpers";
+import { NotificationButton } from "./components/NotificationButton";
 
 const App = observer(() => {
   useEffect(() => {
@@ -113,6 +114,7 @@ const App = observer(() => {
         <AddItemModal editingItem={editingItem} onClose={handleCloseModal} />
       )}
       {toast && <Toast message={toast} />}
+      <NotificationButton />
     </div>
   );
 });
