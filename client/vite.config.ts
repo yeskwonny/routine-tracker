@@ -8,6 +8,9 @@ export default defineConfig({
     react(),
     tailwindcss(),
     VitePWA({
+      devOptions: {
+        enabled: true,
+      },
       registerType: "autoUpdate",
       manifest: {
         name: "Routine Tracker",
