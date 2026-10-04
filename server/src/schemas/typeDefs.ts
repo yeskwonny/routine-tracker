@@ -15,5 +15,6 @@ export const typeDefs = `#graphql
     addItem(name: String!, cycleDays: Int!, lastReplacedAt: String!): Item
     updateItem(id: String!, name: String, cycleDays: Int, lastReplacedAt: String): Item
     deleteItem(id: String!): Item
+    saveSubscription(endpoint: String!, p256dh: String!, auth: String!): Boolean
   }
 `;

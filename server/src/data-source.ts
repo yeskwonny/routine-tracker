@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { Item } from "./entities/Item.js";
+import { Subscription } from "./entities/Subscription.js";
 
 const isProduction = !!process.env.DATABASE_URL;
 
@@ -11,7 +12,7 @@ export const AppDataSource = new DataSource(
         url: process.env.DATABASE_URL,
         synchronize: true,
         logging: true,
-        entities: [Item],
+        entities: [Item, Subscription],
         ssl: { rejectUnauthorized: false },
       }
     : {
@@ -19,6 +20,6 @@ export const AppDataSource = new DataSource(
         database: "database.sqlite",
         synchronize: true,
         logging: true,
-        entities: [Item],
+        entities: [Item, Subscription],
       },
 );

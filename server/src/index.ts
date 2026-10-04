@@ -5,9 +5,11 @@ import express from "express";
 import cors from "cors";
 import { AppDataSource } from "./data-source.js";
 import { Item } from "./entities/Item.js";
+import { Subscription } from "./entities/Subscription.js";
 import { typeDefs } from "./schemas/typeDefs.js";
 
 const itemRepository = AppDataSource.getRepository(Item);
+const subscriptionRepository = AppDataSource.getRepository(Subscription);
 
 const resolvers = {
   Query: {
@@ -44,6 +46,15 @@ const resolvers = {
 
       await itemRepository.remove(existingItem);
       return existingItem;
+    },
+    saveSubscription: async (
+      _parent: unknown,
+      args: { endpoint: string; p256dh: string; auth: string },
+    ) => {
+      await subscriptionRepository.clear();
+      const sub = subscriptionRepository.create(args);
+      await subscriptionRepository.save(sub);
+      return true;
     },
   },
 };
