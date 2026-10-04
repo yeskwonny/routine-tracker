@@ -20,7 +20,7 @@ export const getStatus = (daysRemaining: number): "overdue" | "soon" | "ok" => {
 const urlBase64ToUint8Array = (
   base64String: string,
 ): Uint8Array<ArrayBuffer> => {
-  if (!base64String.length) {
+  if (!base64String) {
     throw new Error("VAPID public key is missing");
   }
 
