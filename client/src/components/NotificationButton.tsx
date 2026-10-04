@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMutation } from "@apollo/client/react";
-import { SAVE_SUBSCRIPTION } from "../api/subscription";
+import { SAVE_SUBSCRIPTION } from "../api/Subscription";
 import { subscribeToPush } from "../helpers";
 
 export const NotificationButton = () => {
