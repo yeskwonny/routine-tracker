@@ -11,7 +11,10 @@ export default defineConfig({
       devOptions: {
         enabled: true,
       },
+      srcDir: "src",
+      filename: "sw.ts",
       registerType: "autoUpdate",
+      strategies: "injectManifest",
       manifest: {
         name: "Routine Tracker",
         short_name: "Routine",
