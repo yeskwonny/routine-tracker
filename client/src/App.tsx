@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { ItemStore, itemStore, type ItemType } from "./stores/ItemStore";
+import { itemStore, type ItemType } from "./stores/ItemStore";
 import { ItemCard } from "./components/ItemCard";
 import { IconClipboardList, IconPlus } from "@tabler/icons-react";
 import { AddItemModal } from "./components/AddItemModal";
