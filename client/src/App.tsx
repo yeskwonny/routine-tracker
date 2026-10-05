@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { itemStore, type ItemType } from "./stores/ItemStore";
+import { ItemStore, itemStore, type ItemType } from "./stores/ItemStore";
 import { ItemCard } from "./components/ItemCard";
 import { IconClipboardList, IconPlus } from "@tabler/icons-react";
 import { AddItemModal } from "./components/AddItemModal";
@@ -8,6 +8,7 @@ import "./index.css";
 import { Toast } from "./components/Toast";
 import { getDaysRemaining } from "./helpers";
 import { NotificationButton } from "./components/NotificationButton";
+import { Spinner } from "./components/Spinner";
 
 const App = observer(() => {
   useEffect(() => {
@@ -60,7 +61,7 @@ const App = observer(() => {
   const overdueCount = itemStore.items.filter(
     (item) => getDaysRemaining(item.cycleDays, item.lastReplacedAt) < 0,
   ).length;
-
+  const isLoading = itemStore.isLoading;
   return (
     <div className="max-w-sm mx-auto p-6">
       <div className="flex mb-1 justify-between items-center">
@@ -79,8 +80,9 @@ const App = observer(() => {
           {overdueCount > 0 && ` · ${overdueCount} overdue`}
         </p>
       )}
-
-      {itemStore.items.length === 0 ? (
+      {isLoading ? (
+        <Spinner />
+      ) : itemStore.items.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mb-4">
             <IconClipboardList size={24} className="text-gray-400" />
@@ -110,11 +112,11 @@ const App = observer(() => {
         ))
       )}
 
+      {!isLoading && <NotificationButton />}
       {isModalOpen && (
         <AddItemModal editingItem={editingItem} onClose={handleCloseModal} />
       )}
       {toast && <Toast message={toast} />}
-      <NotificationButton />
     </div>
   );
 });
