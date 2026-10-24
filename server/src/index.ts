@@ -1,3 +1,4 @@
+import "./env.js";
 import "reflect-metadata";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@as-integrations/express5";
@@ -7,6 +8,7 @@ import { AppDataSource } from "./data-source.js";
 import { Item } from "./entities/Item.js";
 import { Subscription } from "./entities/Subscription.js";
 import { typeDefs } from "./schemas/typeDefs.js";
+import { sendPushNotification } from "./services/push.js";
 
 const itemRepository = AppDataSource.getRepository(Item);
 const subscriptionRepository = AppDataSource.getRepository(Subscription);
@@ -62,7 +64,12 @@ const resolvers = {
 AppDataSource.initialize()
   .then(async () => {
     console.log("✅ Suceesfully connetct to DB");
+    const result = await sendPushNotification({
+      title: "테스트 알림",
+      body: "루틴 알림이 정상적으로 연결됐어요!",
+    });
 
+    console.log("푸시 발송 결과:", result);
     const app = express();
     const server = new ApolloServer({ typeDefs, resolvers: resolvers as any });
 

@@ -10,6 +10,7 @@ export default defineConfig({
     VitePWA({
       devOptions: {
         enabled: true,
+        type: "module",
       },
       srcDir: "src",
       filename: "sw.ts",
