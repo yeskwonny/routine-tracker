@@ -3,12 +3,19 @@ import { observer } from "mobx-react-lite";
 import { IconX } from "@tabler/icons-react";
 import { itemStore, type ItemType } from "../stores/ItemStore";
 
+import { Spinner } from "./Spinner";
+
 interface AddItemModalProps {
   onClose: () => void;
   editingItem: ItemType | null;
 }
 export const AddItemModal = observer(
   ({ onClose, editingItem }: AddItemModalProps) => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const close = () => {
+      if (!isSubmitting) onClose();
+    };
     const isEditMode = !!editingItem;
 
     const [name, setName] = useState(editingItem?.name ?? "");
@@ -20,30 +27,37 @@ export const AddItemModal = observer(
     );
 
     const handleSubmit = async () => {
-      if (!name || !cycleDays) return;
+      if (!name || !cycleDays || isSubmitting) return;
+      setIsSubmitting(true);
+      setError(null);
+      try {
+        if (isEditMode) {
+          await itemStore.updateItem({
+            id: editingItem.id,
+            name,
+            cycleDays: Number(cycleDays),
+            lastReplacedAt,
+          });
+        } else {
+          await itemStore.addItem({
+            name,
+            cycleDays: Number(cycleDays),
+            lastReplacedAt,
+          });
+        }
 
-      if (isEditMode) {
-        await itemStore.updateItem({
-          id: editingItem.id,
-          name,
-          cycleDays: Number(cycleDays),
-          lastReplacedAt,
-        });
-      } else {
-        await itemStore.addItem({
-          name,
-          cycleDays: Number(cycleDays),
-          lastReplacedAt,
-        });
+        onClose();
+      } catch {
+        setError("Could not save the item. Please try again.");
+      } finally {
+        setIsSubmitting(false);
       }
-
-      onClose();
     };
 
     return (
       <div
         className="fixed inset-0 bg-black/45 flex items-center justify-center z-50"
-        onClick={onClose}
+        onClick={close}
       >
         <div
           className="bg-white rounded-2xl p-6 w-80"
@@ -52,7 +66,8 @@ export const AddItemModal = observer(
           <div className="flex items-center justify-between mb-5">
             <p className="text-base font-medium m-0">Add item</p>
             <button
-              onClick={onClose}
+              onClick={close}
+              disabled={isSubmitting}
               aria-label="Close"
               className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100"
             >
@@ -66,6 +81,7 @@ export const AddItemModal = observer(
               <input
                 type="text"
                 placeholder="Toothbrush head"
+                disabled={isSubmitting}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm transition-shadow"
@@ -79,6 +95,7 @@ export const AddItemModal = observer(
               <input
                 type="number"
                 placeholder="90"
+                disabled={isSubmitting}
                 value={cycleDays}
                 onChange={(e) => setCycleDays(e.target.value)}
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm transition-shadow"
@@ -91,6 +108,7 @@ export const AddItemModal = observer(
               </label>
               <input
                 type="date"
+                disabled={isSubmitting}
                 value={lastReplacedAt}
                 onChange={(e) => setLastReplacedAt(e.target.value)}
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm transition-shadow"
@@ -98,18 +116,23 @@ export const AddItemModal = observer(
             </div>
           </div>
 
+          {error && <p role="alert" className="text-sm text-red-600 mt-3">{error}</p>}
           <div className="flex gap-2 mt-5">
             <button
-              onClick={onClose}
+              onClick={close}
+              disabled={isSubmitting}
               className="flex-1 border border-gray-300 rounded-lg py-2 text-sm"
             >
               Cancel
             </button>
             <button
               onClick={handleSubmit}
-              className="flex-1 bg-gray-900 text-white rounded-lg py-2 text-sm"
+              disabled={isSubmitting}
+              aria-busy={isSubmitting}
+              className="flex-1 flex items-center justify-center gap-2 disabled:opacity-60 bg-gray-900 text-white rounded-lg py-2 text-sm"
             >
-              {isEditMode ? "Save changes" : "Add item"}
+              {isSubmitting && <Spinner inline />}
+              {isSubmitting ? "Saving…" : isEditMode ? "Save changes" : "Add item"}
             </button>
           </div>
         </div>

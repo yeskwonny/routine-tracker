@@ -10,14 +10,16 @@ import {
 } from "@tabler/icons-react";
 import { getDaysRemaining, getStatus } from "../helpers";
 
+import { Spinner } from "./Spinner";
+
 interface ItemCardProps {
   id: string;
   name: string;
   cycleDays: number;
   lastReplacedAt: string;
-  onReplace: (id: string) => void;
+  onReplace: (id: string) => Promise<void>;
   onEdit: (id: string) => void;
-  onDelete: (id: string) => void;
+  onDelete: (id: string) => Promise<void>;
 }
 
 const statusConfig = {
@@ -54,6 +56,21 @@ export const ItemCard = observer(
     onEdit,
     onDelete,
   }: ItemCardProps) => {
+    const [pending, setPending] = useState<"replace" | "delete" | null>(null);
+    const [error, setError] = useState<string | null>(null);
+    const runAction = async (action: "replace" | "delete") => {
+      if (pending !== null) return;
+      setPending(action);
+      setError(null);
+      try {
+        await (action === "replace" ? onReplace(id) : onDelete(id));
+        setMenuOpen(false);
+      } catch {
+        setError("Could not update the item. Please try again.");
+      } finally {
+        setPending(null);
+      }
+    };
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
@@ -99,15 +116,21 @@ export const ItemCard = observer(
         </div>
 
         <button
-          onClick={() => onReplace(id)}
-          className="text-xs px-3 py-1.5 rounded-lg bg-gray-900 text-white font-medium hover:bg-gray-700 shrink-0"
+          onClick={() => void runAction("replace")}
+          disabled={pending !== null}
+          aria-busy={pending === "replace"}
+          className="inline-flex items-center gap-2 disabled:opacity-60 text-xs px-3 py-1.5 rounded-lg bg-gray-900 text-white font-medium hover:bg-gray-700 shrink-0"
         >
-          Replace
+          {pending === "replace" && <Spinner inline />}
+          {pending === "replace" ? "Replacing…" : "Replace"}
         </button>
 
+        {error && <p role="alert" className="text-xs text-red-600">{error}</p>}
+        {pending === "delete" && !menuOpen && <Spinner inline />}
         <div className="relative" ref={menuRef}>
           <button
             onClick={() => setMenuOpen((prev) => !prev)}
+            disabled={pending !== null}
             aria-label="More options"
             className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-gray-100 shrink-0"
           >
@@ -117,6 +140,7 @@ export const ItemCard = observer(
           {menuOpen && (
             <div className="absolute right-0 top-8 bg-white border border-gray-200 rounded-lg shadow-lg py-1 w-32 z-10">
               <button
+                disabled={pending !== null}
                 onClick={() => {
                   onEdit(id);
                   setMenuOpen(false);
@@ -127,14 +151,13 @@ export const ItemCard = observer(
                 Edit
               </button>
               <button
-                onClick={() => {
-                  onDelete(id);
-                  setMenuOpen(false);
-                }}
+                disabled={pending !== null}
+                aria-busy={pending === "delete"}
+                onClick={() => void runAction("delete")}
                 className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50"
               >
-                <IconTrash size={14} />
-                Delete
+                {pending === "delete" ? <Spinner inline /> : <IconTrash size={14} />}
+                {pending === "delete" ? "Deleting…" : "Delete"}
               </button>
             </div>
           )}

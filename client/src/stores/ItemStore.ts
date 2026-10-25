@@ -17,9 +17,12 @@ export const ItemStore = types
   .actions((self) => ({
     fetchItems: flow(function* () {
       self.isLoading = true;
-      const { data } = yield client.query({ query: GET_ITEMS });
-      self.items.replace(data.items);
-      self.isLoading = false;
+      try {
+        const { data } = yield client.query({ query: GET_ITEMS });
+        self.items.replace(data.items);
+      } finally {
+        self.isLoading = false;
+      }
     }),
 
     addItem: flow(function* (input: {

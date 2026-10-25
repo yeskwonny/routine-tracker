@@ -12,25 +12,28 @@ import { Spinner } from "./components/Spinner";
 
 const App = observer(() => {
   useEffect(() => {
-    itemStore.fetchItems();
+    itemStore.fetchItems().catch(() => {
+      setToast("Could not load items. Please refresh to try again.");
+    });
   }, []);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<ItemType | null>(null);
   const [toast, setToast] = useState<string | null>(null);
 
-  const handleReplace = (id: string) => {
+  const handleReplace = async (id: string) => {
     const item = itemStore.items.find((i) => i.id === id);
     if (!item) return;
 
-    itemStore.updateItem({
+    const name = item.name;
+    await itemStore.updateItem({
       id,
       name: item.name,
       cycleDays: item.cycleDays,
       lastReplacedAt: new Date().toISOString().split("T")[0],
     });
 
-    setToast(`${item.name} marked as replaced`);
+    setToast(`${name} marked as replaced`);
     setTimeout(() => setToast(null), 2000);
   };
 
@@ -41,11 +44,11 @@ const App = observer(() => {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     const item = itemStore.items.find((i) => i.id === id);
     if (!item) return;
 
-    itemStore.removeItem(id);
+    await itemStore.removeItem(id);
   };
 
   const handleCloseModal = () => {
