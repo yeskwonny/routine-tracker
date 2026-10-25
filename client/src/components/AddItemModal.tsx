@@ -84,7 +84,7 @@ export const AddItemModal = observer(
                 disabled={isSubmitting}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm transition-shadow"
+                className="block box-border w-full min-w-0 max-w-full border border-gray-300 rounded-lg px-3 py-2 text-sm transition-shadow"
               />
             </div>
 
@@ -98,7 +98,7 @@ export const AddItemModal = observer(
                 disabled={isSubmitting}
                 value={cycleDays}
                 onChange={(e) => setCycleDays(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm transition-shadow"
+                className="block box-border w-full min-w-0 max-w-full border border-gray-300 rounded-lg px-3 py-2 text-sm transition-shadow"
               />
             </div>
 
@@ -111,7 +111,7 @@ export const AddItemModal = observer(
                 disabled={isSubmitting}
                 value={lastReplacedAt}
                 onChange={(e) => setLastReplacedAt(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm transition-shadow"
+                className="appearance-none block box-border w-full min-w-0 max-w-full border border-gray-300 rounded-lg px-3 py-2 text-sm transition-shadow"
               />
             </div>
           </div>
