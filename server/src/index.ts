@@ -64,12 +64,6 @@ const resolvers = {
 AppDataSource.initialize()
   .then(async () => {
     console.log("✅ Suceesfully connetct to DB");
-    const result = await sendPushNotification({
-      title: "테스트 알림",
-      body: "루틴 알림이 정상적으로 연결됐어요!",
-    });
-
-    console.log("푸시 발송 결과:", result);
     const app = express();
     const server = new ApolloServer({ typeDefs, resolvers: resolvers as any });
 
@@ -91,6 +85,7 @@ AppDataSource.initialize()
     const PORT = process.env.PORT ? Number(process.env.PORT) : 4000;
     app.listen(PORT, () => {
       console.log(`🚀 Server is running: http://localhost:${PORT}`);
+      startReminderScheduler();
     });
   })
   .catch((err) => {
