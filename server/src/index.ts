@@ -8,7 +8,8 @@ import { AppDataSource } from "./data-source.js";
 import { Item } from "./entities/Item.js";
 import { Subscription } from "./entities/Subscription.js";
 import { typeDefs } from "./schemas/typeDefs.js";
-import { sendPushNotification } from "./services/push.js";
+import { runReminders } from "./services/reminders.js";
+import { createReminderHandler } from "./routes/reminders.js";
 
 const itemRepository = AppDataSource.getRepository(Item);
 const subscriptionRepository = AppDataSource.getRepository(Subscription);
@@ -69,6 +70,8 @@ AppDataSource.initialize()
 
     await server.start();
 
+    app.post("/reminders/run", createReminderHandler(runReminders));
+
     app.use(
       "/",
       cors({
@@ -85,7 +88,6 @@ AppDataSource.initialize()
     const PORT = process.env.PORT ? Number(process.env.PORT) : 4000;
     app.listen(PORT, () => {
       console.log(`🚀 Server is running: http://localhost:${PORT}`);
-      startReminderScheduler();
     });
   })
   .catch((err) => {

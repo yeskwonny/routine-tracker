@@ -13,4 +13,7 @@ export class Item {
 
   @Column({ type: "varchar" })
   lastReplacedAt!: string;
+
+  @Column({ type: "varchar", nullable: true })
+  lastNotifiedOn!: string | null;
 }
